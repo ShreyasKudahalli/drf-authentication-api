@@ -3,7 +3,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 
-from .serializers import RegisterSerializer
+from .serializers import RegisterSerializer, LoginSerializer
+
 
 
 class RegisterView(APIView):
@@ -32,4 +33,28 @@ class RegisterView(APIView):
         return Response(
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
+        )
+
+
+
+
+class LoginView(APIView):
+
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+
+        serializer = LoginSerializer(
+            data=request.data
+        )
+
+        serializer.is_valid(raise_exception=True)
+
+        return Response(
+            {
+                "message": "Login successful",
+                "access": serializer.validated_data['access'],
+                "refresh": serializer.validated_data['refresh']
+            },
+            status=status.HTTP_200_OK
         )
