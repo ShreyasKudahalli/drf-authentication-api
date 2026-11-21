@@ -27,6 +27,7 @@ class RegisterView(APIView):
                 },
                 status=status.HTTP_201_CREATED
             )
+        print(serializer.errors)
 
         return Response(
             serializer.errors,
